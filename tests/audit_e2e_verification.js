@@ -1,7 +1,7 @@
 import prisma from '../src/config/prisma.js';
 import env from '../src/config/env.js';
 
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = process.env.BASE_URL || `http://localhost:${env.PORT || 5000}/api`;
 
 async function runAudit() {
   console.log('--- STARTING REAL DATABASE-BACKED VERIFICATION ---');

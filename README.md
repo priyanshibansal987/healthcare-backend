@@ -237,7 +237,7 @@ Ensure you have the following installed on your machine:
 
 ### Step 1: Clone or Navigate to the Repository
 ```bash
-git clone https://github.com/bansalpriyanshi946/healthcare-backend.git
+git clone https://github.com/priyanshibansal987/healthcare-backend.git
 cd healthcare-backend
 ```
 
