@@ -1,0 +1,29 @@
+{
+  "name": "healthcare-backend",
+  "version": "1.0.0",
+  "description": "Healthcare Management Backend REST API built with Node.js, Express, PostgreSQL, Prisma ORM, and JWT authentication",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules\" jest --runInBand --detectOpenHandles --forceExit",
+    "test:coverage": "cross-env NODE_OPTIONS=\"--experimental-vm-modules\" jest --coverage --runInBand --detectOpenHandles --forceExit",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:push": "prisma db push"
+  },
+  "keywords": [
+    "healthcare",
+    "rest-api",
+    "nodejs",
+    "express",
+    "postgresql",
+    "prisma",
+    "jwt",
+    "zod"
+  ],
+  "author": "Priyanshi Bansal",
+  "license": "ISC"
+}
