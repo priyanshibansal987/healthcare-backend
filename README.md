@@ -18,24 +18,8 @@ Build an enterprise-structured, secure, and GitHub-ready backend REST API for a 
 
 ---
 
-## 3. Framework Compliance Note
 
-> **Note for Evaluators:**
-> The opening instruction of the assignment states:
-> *"Framework: Please use the Django/Node framework for completing the assignment. You are free to use any libraries necessary."*
->
-> While subsequent clauses in the prompt mention Django, Django REST Framework (DRF), and `djangorestframework-simplejwt`, this project was intentionally built using **Node.js and Express.js** as permitted by the opening statement.
->
-> The Django-specific components are translated to equivalent enterprise Node.js technologies:
-> - **Django REST Framework (DRF)** $\rightarrow$ **Express.js** with modular MVC service layer
-> - **DRF Serializers** $\rightarrow$ **Zod** schema validation
-> - **Django ORM** $\rightarrow$ **Prisma ORM** with PostgreSQL migrations
-> - **`djangorestframework-simplejwt`** $\rightarrow$ **`jsonwebtoken`** with custom Bearer token middleware
-> - **PBKDF2 Password Hasher** $\rightarrow$ **`bcryptjs`** with adaptive work factor (10 salt rounds)
->
-> A complete architectural mapping and interview defense guide is provided in [INTERVIEW_GUIDE.md](file:///c:/Users/rahul/healthcare-backend/docs/INTERVIEW_GUIDE.md).
 
----
 
 ## 4. Technology Stack
 
