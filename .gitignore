@@ -3,6 +3,7 @@ node_modules/
 
 # Environment files
 .env
+.env.*
 .env.local
 .env.*.local
 .env.test
@@ -10,6 +11,7 @@ node_modules/
 
 # Testing and coverage
 coverage/
+.nyc_output/
 
 # Build artifacts
 dist/
