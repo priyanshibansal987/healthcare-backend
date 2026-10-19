@@ -10,6 +10,11 @@ const logLevels = env.NODE_ENV === 'development'
  * Shared singleton PrismaClient instance
  */
 const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: env.DATABASE_URL
+    }
+  },
   log: logLevels
 });
 
