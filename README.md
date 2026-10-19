@@ -546,4 +546,4 @@ The repository was built incrementally using dedicated feature branches:
 
 - **Author**: Priyanshi Bansal
 - **Repository**: `healthcare-backend`
-- **GitHub**: [https://github.com/bansalpriyanshi946/healthcare-backend](https://github.com/bansalpriyanshi946/healthcare-backend)
+- **GitHub**: [https://github.com/priyanshibansal987/healthcare-backend](https://github.com/priyanshibansal987/healthcare-backend)
