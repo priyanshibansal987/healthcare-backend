@@ -1,0 +1,509 @@
+{
+  "info": {
+    "_postman_id": "c1f71a93-559d-4be9-9d5a-8b1732a321e1",
+    "name": "Healthcare Management Backend REST API",
+    "description": "Comprehensive Postman collection for Healthcare Backend API campus-drive evaluation.\n\nExecution Order for Evaluator:\n1. Run Authentication / Register User\n2. Run Authentication / Login User (Auto-stores Bearer token)\n3. Run Patients / Create Patient (Auto-stores patientId)\n4. Run Doctors / Create Doctor (Auto-stores doctorId)\n5. Run Patient-Doctor Mappings / Assign Doctor to Patient (Auto-stores mappingId)\n6. Run Patient-Doctor Mappings / Get Assigned Doctors for Patient\n7. Run Patients / Get All Patients & Get Patient By ID\n8. Run Doctors / Get All Doctors & Get Doctor By ID\n9. Run Negative & Security Tests folder\n10. Run Deletion flows (Delete Mapping -> Delete Patient -> Delete Doctor)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "patientId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "doctorId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "mappingId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Response has success true\", function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.success).to.eql(true);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Campus Student\",\n  \"email\": \"student@campus.edu\",\n  \"password\": \"SecurePass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register/",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register", ""]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set(\"token\", jsonData.data.token);",
+                  "    console.log(\"Saved JWT token successfully\");",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"student@campus.edu\",\n  \"password\": \"SecurePass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login/",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Patients",
+      "item": [
+        {
+          "name": "Create Patient",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.id) {",
+                  "    pm.collectionVariables.set(\"patientId\", json.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Aarav Sharma\",\n  \"dateOfBirth\": \"1996-08-24\",\n  \"gender\": \"Male\",\n  \"email\": \"aarav.sharma@example.com\",\n  \"phone\": \"9876543210\",\n  \"address\": \"42 Park Avenue, New Delhi\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", ""]
+            }
+          }
+        },
+        {
+          "name": "Get All Patients (Owned Only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/patients/",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Patient By ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9988776655\",\n  \"address\": \"Flat 301, Lake Residency, New Delhi\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Patient",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Doctors",
+      "item": [
+        {
+          "name": "Create Doctor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.id) {",
+                  "    pm.collectionVariables.set(\"doctorId\", json.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dr. Priya Nair\",\n  \"email\": \"dr.priya@apollohealthcare.org\",\n  \"phone\": \"9123456780\",\n  \"specialization\": \"Cardiology\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/doctors/",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", ""]
+            }
+          }
+        },
+        {
+          "name": "Get All Doctors",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/doctors/",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Doctor By ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/doctors/{{doctorId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "{{doctorId}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Doctor",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"9876501234\",\n  \"specialization\": \"Interventional Cardiology\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/doctors/{{doctorId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "{{doctorId}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Doctor",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/doctors/{{doctorId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "{{doctorId}}", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Patient-Doctor Mappings",
+      "item": [
+        {
+          "name": "Assign Doctor to Patient",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.id) {",
+                  "    pm.collectionVariables.set(\"mappingId\", json.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientId\": \"{{patientId}}\",\n  \"doctorId\": \"{{doctorId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/mappings/",
+              "host": ["{{baseUrl}}"],
+              "path": ["mappings", ""]
+            }
+          }
+        },
+        {
+          "name": "Get All Permitted Mappings",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/mappings/",
+              "host": ["{{baseUrl}}"],
+              "path": ["mappings", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Assigned Doctors For Patient",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/mappings/{{patientId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["mappings", "{{patientId}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Patient-Doctor Mapping",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/mappings/{{mappingId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["mappings", "{{mappingId}}", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Negative and Security Tests",
+      "item": [
+        {
+          "name": "Register with Duplicate Email (Expect 409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Duplicate User\",\n  \"email\": \"student@campus.edu\",\n  \"password\": \"AnotherPass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register/",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register", ""]
+            }
+          }
+        },
+        {
+          "name": "Login with Wrong Password (Expect 401)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"student@campus.edu\",\n  \"password\": \"IncorrectPassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login/",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login", ""]
+            }
+          }
+        },
+        {
+          "name": "Access Patients Without Token (Expect 401)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/patients/",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", ""]
+            }
+          }
+        },
+        {
+          "name": "Access Nonexistent Patient (Expect 404)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/patients/00000000-0000-0000-0000-000000000000/",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "00000000-0000-0000-0000-000000000000", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Doctor with Active Mappings (Expect 409)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/doctors/{{doctorId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "{{doctorId}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Unknown Route Test (Expect 404)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/non-existent-api-path",
+              "host": ["{{baseUrl}}"],
+              "path": ["non-existent-api-path"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
