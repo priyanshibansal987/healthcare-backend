@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "c1f71a93-559d-4be9-9d5a-8b1732a321e1",
     "name": "Healthcare Management Backend REST API",
-    "description": "Comprehensive Postman collection for Healthcare Backend API campus-drive evaluation.\n\nExecution Order for Evaluator:\n1. Run Authentication / Register User\n2. Run Authentication / Login User (Auto-stores Bearer token)\n3. Run Patients / Create Patient (Auto-stores patientId)\n4. Run Doctors / Create Doctor (Auto-stores doctorId)\n5. Run Patient-Doctor Mappings / Assign Doctor to Patient (Auto-stores mappingId)\n6. Run Patient-Doctor Mappings / Get Assigned Doctors for Patient\n7. Run Patients / Get All Patients & Get Patient By ID\n8. Run Doctors / Get All Doctors & Get Doctor By ID\n9. Run Negative & Security Tests folder\n10. Run Deletion flows (Delete Mapping -> Delete Patient -> Delete Doctor)",
+    "description": "Comprehensive Postman collection for Healthcare Backend API campus-drive evaluation.\n\nExecution Order for Evaluator:\n1. 1. Authentication: Register User & Login User (captures JWT token)\n2. 2. Patients: Create Patient (captures patientId), Get All, Get By ID, Update\n3. 3. Doctors: Create Doctor (captures doctorId), Get All, Get By ID, Update\n4. 4. Patient-Doctor Mappings: Assign Doctor (captures mappingId), Get All, Get By Patient\n5. 5. Negative and Security Tests: Duplicate register (409), Wrong password (401), Unauthorized access (401), Nonexistent patient (404), Delete doctor with active mappings (409), Unknown route (404)\n6. 6. Resource Cleanup: Delete Mapping (200), Delete Patient (200), Delete Doctor (200)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -65,7 +65,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Campus Student\",\n  \"email\": \"student@campus.edu\",\n  \"password\": \"SecurePass123!\"\n}"
+              "raw": "{\n  \"name\": \"Campus Evaluator User\",\n  \"email\": \"evaluator@campusdrive.edu\",\n  \"password\": \"SecurePass123!\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/register/",
@@ -104,7 +104,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"student@campus.edu\",\n  \"password\": \"SecurePass123!\"\n}"
+              "raw": "{\n  \"email\": \"evaluator@campusdrive.edu\",\n  \"password\": \"SecurePass123!\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login/",
@@ -157,6 +157,19 @@
         },
         {
           "name": "Get All Patients (Owned Only)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "bearer",
@@ -172,6 +185,19 @@
         },
         {
           "name": "Get Patient By ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "bearer",
@@ -187,6 +213,19 @@
         },
         {
           "name": "Update Patient",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "bearer",
@@ -198,21 +237,6 @@
               "mode": "raw",
               "raw": "{\n  \"phone\": \"9988776655\",\n  \"address\": \"Flat 301, Lake Residency, New Delhi\"\n}"
             },
-            "url": {
-              "raw": "{{baseUrl}}/patients/{{patientId}}/",
-              "host": ["{{baseUrl}}"],
-              "path": ["patients", "{{patientId}}", ""]
-            }
-          }
-        },
-        {
-          "name": "Delete Patient",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
-            },
-            "method": "DELETE",
             "url": {
               "raw": "{{baseUrl}}/patients/{{patientId}}/",
               "host": ["{{baseUrl}}"],
@@ -264,6 +288,19 @@
         },
         {
           "name": "Get All Doctors",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "bearer",
@@ -279,6 +316,19 @@
         },
         {
           "name": "Get Doctor By ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "bearer",
@@ -294,6 +344,19 @@
         },
         {
           "name": "Update Doctor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "bearer",
@@ -305,21 +368,6 @@
               "mode": "raw",
               "raw": "{\n  \"phone\": \"9876501234\",\n  \"specialization\": \"Interventional Cardiology\"\n}"
             },
-            "url": {
-              "raw": "{{baseUrl}}/doctors/{{doctorId}}/",
-              "host": ["{{baseUrl}}"],
-              "path": ["doctors", "{{doctorId}}", ""]
-            }
-          }
-        },
-        {
-          "name": "Delete Doctor",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
-            },
-            "method": "DELETE",
             "url": {
               "raw": "{{baseUrl}}/doctors/{{doctorId}}/",
               "host": ["{{baseUrl}}"],
@@ -371,6 +419,19 @@
         },
         {
           "name": "Get All Permitted Mappings",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "bearer",
@@ -386,6 +447,19 @@
         },
         {
           "name": "Get Assigned Doctors For Patient",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "bearer",
@@ -398,21 +472,6 @@
               "path": ["mappings", "{{patientId}}", ""]
             }
           }
-        },
-        {
-          "name": "Delete Patient-Doctor Mapping",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
-            },
-            "method": "DELETE",
-            "url": {
-              "raw": "{{baseUrl}}/mappings/{{mappingId}}/",
-              "host": ["{{baseUrl}}"],
-              "path": ["mappings", "{{mappingId}}", ""]
-            }
-          }
         }
       ]
     },
@@ -421,12 +480,25 @@
       "item": [
         {
           "name": "Register with Duplicate Email (Expect 409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 409 Conflict\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Duplicate User\",\n  \"email\": \"student@campus.edu\",\n  \"password\": \"AnotherPass123!\"\n}"
+              "raw": "{\n  \"name\": \"Duplicate User\",\n  \"email\": \"evaluator@campusdrive.edu\",\n  \"password\": \"AnotherPass123!\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/register/",
@@ -437,12 +509,25 @@
         },
         {
           "name": "Login with Wrong Password (Expect 401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 401 Unauthorized\", function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"student@campus.edu\",\n  \"password\": \"IncorrectPassword123\"\n}"
+              "raw": "{\n  \"email\": \"evaluator@campusdrive.edu\",\n  \"password\": \"IncorrectPassword123\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login/",
@@ -453,6 +538,19 @@
         },
         {
           "name": "Access Patients Without Token (Expect 401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 401 Unauthorized\", function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "url": {
@@ -464,6 +562,19 @@
         },
         {
           "name": "Access Nonexistent Patient (Expect 404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "bearer",
@@ -479,6 +590,19 @@
         },
         {
           "name": "Delete Doctor with Active Mappings (Expect 409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 409 Conflict\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "bearer",
@@ -494,12 +618,114 @@
         },
         {
           "name": "Unknown Route Test (Expect 404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "url": {
               "raw": "{{baseUrl}}/non-existent-api-path",
               "host": ["{{baseUrl}}"],
               "path": ["non-existent-api-path"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Resource Cleanup",
+      "item": [
+        {
+          "name": "Delete Patient-Doctor Mapping",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/mappings/{{mappingId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["mappings", "{{mappingId}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Patient",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Doctor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/doctors/{{doctorId}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "{{doctorId}}", ""]
             }
           }
         }
